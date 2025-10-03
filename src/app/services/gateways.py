@@ -44,7 +44,7 @@ def text_generation_service(
 
 	response = requests.post(model_url, headers=headers, json=data, timeout=10)
 	if response.status_code != 200:
-		text_generation_response.succes = False
+		text_generation_response.success = False
 		text_generation_response.message = f'{response.status_code} {response.text}'
 		return text_generation_response
 
