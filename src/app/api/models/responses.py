@@ -13,10 +13,5 @@ class BaseResponse(pd.BaseModel):
 class TextGenerationResponse(BaseResponse):
 	generated_text: str
 	tokens_used: int
-	proccessing_time: float
-
-
-class ErrorResponse(BaseResponse):
-	error_code: int
-	details: tp.Optional[tp.Dict[str, tp.Any]] = None
+	processing_time: float
 

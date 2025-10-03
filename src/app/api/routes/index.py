@@ -1,4 +1,6 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, status
+
+import os
 
 router = APIRouter()
 
@@ -11,5 +13,18 @@ router = APIRouter()
 def index():
 	return {
 		'status_code': status.HTTP_200_OK,
-		'detaul': 'hello, world!'
+		'detail': 'hello, world!'
 	}
+
+
+@router.get(
+	'/models',
+	summary='ai models',
+	description='list of available ai models'
+)
+def models():
+	return {
+		'status_code': status.HTTP_200_OK,
+		'detail': os.listdir(os.getcwd() + '/models')
+	}
+

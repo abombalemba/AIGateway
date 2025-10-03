@@ -1,8 +1,6 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Query, HTTPException, status
 
 import datetime as dt
-import typing as tp
-import uuid
 
 from app.api.models.requests import *
 from app.api.models.responses import *
@@ -15,24 +13,24 @@ router = APIRouter()
 @router.post(
 	path='/text',
 	response_model=TextGenerationResponse,
-	summary='text gen route',
+	summary='text generation route',
 	description='text generation route'
 )
-def generate_text(request: TextGenerationRequest):
+def generate_text(
+	request: TextGenerationRequest,
+	model: str = Query(..., description='ai model title')
+):
 	try:
-		result = text_generation_service(request)
-
-		return TextGenerationResponse(
-			success=True,
-			message='ok',
-			timestamp=dt.now(),
-			generated_text=result['generated_text'],
-			tokens_used=result['tokens_used'],
-			processing_time=result['processing_time']
-		)
+		response = text_generation_service(request, model)
+		return response
 
 	except Exception as ex:
-		raise HTTPException(
-			status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-			detail=f'error of gen text'
+		return TextGenerationResponse(
+			success=False,
+			message=f'{ex}',
+			timestamp=dt.datetime.now(),
+			generated_text='',
+			tokens_used=0,
+			processing_time=0.0
 		)
+
